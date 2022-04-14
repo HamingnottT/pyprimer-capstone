@@ -1,0 +1,55 @@
+.container {
+  max-width: 600px;
+  font-family: "Barlow", sans-serif;
+  background-color: #fefcf6;
+  color: #343e4c;
+}
+
+.btn {
+  background: #0e8684;
+  color: white;
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  font-weight: 500;
+}
+
+.btn:hover {
+  color: #343e4c;
+}
+
+.btn:focus {
+  outline: none !important;
+}
+
+.fraunces {
+  font-family: "Fraunces", serif;
+}
+
+.fw-300 {
+  font-weight: 300;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.fw-900 {
+  font-weight: 900;
+}
+
+.barlow {
+  font-family: "Barlow", sans-serif;
+}
