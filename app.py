@@ -31,7 +31,7 @@ class Chats(db.Model):
 TOPICS = [
     "games",
     "sports",
-    "entertaiment",
+    "entertainment",
     "other"
 ]
 
@@ -84,3 +84,47 @@ def sports():
     game_messages = Chats.query.filter_by(topic='sports').order_by(Chats.id)
 
     return render_template("sports.html", topics = TOPICS, messages= game_messages)
+
+
+@app.route("/entertainment", methods=["POST", "GET"])
+def entertainment():
+    if request.method == "POST":
+        chat_message = request.form.get("message")
+        username = "Jake"
+        topic = "entertainment"
+        new_chats = Chats(username="Jake", message=chat_message, topic="entertainment")
+        try:
+            # print(new_chats.username)
+            # print(new_chats.message)
+            db.session.add(new_chats)
+            db.session.commit()
+            print("worked")
+            return redirect("/entertainment")
+        except: 
+            return render_template("error.html", message = "There was an error adding the user" )
+    
+    game_messages = Chats.query.filter_by(topic='entertainment').order_by(Chats.id)
+
+    return render_template("entertainment.html", topics = TOPICS, messages= game_messages)
+
+
+@app.route("/other", methods=["POST", "GET"])
+def other():
+    if request.method == "POST":
+        chat_message = request.form.get("message")
+        username = "Jake"
+        topic = "other"
+        new_chats = Chats(username="Jake", message=chat_message, topic="other")
+        try:
+            # print(new_chats.username)
+            # print(new_chats.message)
+            db.session.add(new_chats)
+            db.session.commit()
+            print("worked")
+            return redirect("/other")
+        except: 
+            return render_template("error.html", message = "There was an error adding the user" )
+    
+    game_messages = Chats.query.filter_by(topic='other').order_by(Chats.id)
+
+    return render_template("other.html", topics = TOPICS, messages= game_messages)
