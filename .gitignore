@@ -130,3 +130,6 @@ dmypy.json
 
 # custom folders
 dev_utils/
+
+# codemy
+codemy/
