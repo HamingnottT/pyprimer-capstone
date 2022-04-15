@@ -61,9 +61,16 @@ def index():
 # ------------------Jake was here-----------------------
 # add user function
 
+""" 
+    /!\ needs attention /!\
+    adding form = UserForm() and form=form in render_template resulted in an error 500
+    Unknown reason why - pending fix
+"""
+
 @app.route("/user/add", methods=["POST", "GET"])
 def add_user():
-    return render_template("add_user.html")
+    form = UserForm()
+    return render_template("add_user.html", form=form)
 
 # ------------------------------------------------------
 
