@@ -59,9 +59,6 @@ TOPICS = [
     "other"
 ]
 
-
-
-
 @app.route("/")
 def index():
     return render_template("index.html", topics = TOPICS)
@@ -76,6 +73,7 @@ def changename():
     return redirect(target_page)
 
 # ------------------------------------------------------
+""" Not in use. May delete this code block. """
 
 @app.route("/user/add", methods=["POST", "GET"])
 def add_user():
