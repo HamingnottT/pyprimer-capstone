@@ -4,6 +4,9 @@ $darkGreyBlue: hsl(215, 19, 25);
 $grey: hsl(215, 5, 54);
 $paleOrange: #fdd6ba;
 $lightCream: hsl(43, 078, 98);
+body{
+  background-color: $lightCream;
+}
 .container{
     max-width: 600px;
     font-family: "Barlow", sans-serif;
@@ -29,6 +32,10 @@ $lightCream: hsl(43, 078, 98);
   .fraunces {
     font-family: "Fraunces", serif;
   }
+  .active{
+    background: #fdd6ba;
+    color: #343e4c;
+}
 
   .fw-300 {
     font-weight: 300;
@@ -52,3 +59,8 @@ $lightCream: hsl(43, 078, 98);
     font-family: "Barlow", sans-serif;
   }
   
+  .username-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

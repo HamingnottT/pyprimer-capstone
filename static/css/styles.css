@@ -1,3 +1,7 @@
+body {
+  background-color: #fefcf6;
+}
+
 .container {
   max-width: 600px;
   font-family: "Barlow", sans-serif;
@@ -26,6 +30,11 @@
   font-family: "Fraunces", serif;
 }
 
+.active {
+  background: #fdd6ba;
+  color: #343e4c;
+}
+
 .fw-300 {
   font-weight: 300;
 }
@@ -52,4 +61,16 @@
 
 .barlow {
   font-family: "Barlow", sans-serif;
+}
+
+.username-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
