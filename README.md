@@ -11,6 +11,8 @@ Our project is a website forum where users can sign up, share their thoughts, an
 
 -HTML5
 
+-CSS & SCSS
+
 -Python v. 3.10.3
 
 -Flask v. 2.1.1
