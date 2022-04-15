@@ -13,8 +13,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chats.db'
 # setting up the session
 app.config['SESSION_PERMANENT']= False
-app.config['SESSION_TYPE']= "filesystem" 
+app.config['SESSION_TYPE']= "filesystem"
 
+# secret key for NameForm
 
 
 # initialize the database
@@ -49,6 +50,28 @@ class UserForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = StringField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+# ------------------------------------------------------
+# for mock index
+import dev_utils.secret_key as sk           #this import is local
+
+app.config['SECRET_KEY'] = sk.secret_key    #abstracted secret key
+
+class NamerForm(FlaskForm):
+    name = StringField("What's your name?", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+@app.route("/name", methods=["GET", "POST"])
+def name():
+    name = None
+    form = NamerForm()
+    # validate form
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ""
+    return render_template("mock_index.html",
+        name = name,
+        form = form)
 
 # ------------------------------------------------------
 
