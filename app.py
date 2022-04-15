@@ -23,7 +23,7 @@ Session(app)
 #Create DB Model
 
 #New Admin table in db for username and password storage
-class Admin(db.Model):
+class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
@@ -31,7 +31,7 @@ class Admin(db.Model):
 class Chats(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     message= db.Column(db.String(200), nullable = False)
-    username= db.Column(db.String(200), db.ForeignKey("admin.username"), nullable = False)
+    username= db.Column(db.String(200), db.ForeignKey("user.username"), nullable = False)
     topic= db.Column(db.String(200), nullable = False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
