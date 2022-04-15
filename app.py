@@ -1,5 +1,8 @@
 from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 from datetime import datetime
 
 # from sqlalchemy.sql import func
@@ -18,16 +21,27 @@ db = SQLAlchemy(app)
 class Chats(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     message= db.Column(db.String(200), nullable = False)
-    username= db.Column(db.String(200), nullable = False)
+    username= db.Column(db.String(200), nullable = False, foreign_key = True)
     topic= db.Column(db.String(200), nullable = False)
+    created_at= db.Column(db.DateTime, default= datetime.utcnow)
 
-    # created_at= db.Column(db.DateTime, default= datetime)
+class Admin(db.Model):
+    id= db.Column(db.Integer, primary_key = True)
+    username= db.Column(db.String(200), nullable = False, unique = True)
+    password= db.Column(db.String(200), nullable = False)
 
 
 # function to return a string when we addsomething
     def __repr__(self):
         return '<Name %r>' % self.id
 
+# ------------------Jake was here-----------------------
+# Form classes to add usernames to database
+
+class UserForm(FlaskForm):
+
+
+# ------------------------------------------------------
 TOPICS = [
     "games",
     "sports",
