@@ -1,18 +1,22 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-# from sqlalchemy.sql import func
+from flask_session import Session
+from sqlalchemy.sql import func
 
 app = Flask(__name__)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chats.db'
+# setting up the session
+app.config['SESSION_PERMANENT']= False
+app.config['SESSION_TYPE']= "filesystem" 
+
 
 
 # initialize the database
 db = SQLAlchemy(app)
-
+Session(app)
 #Create DB Model
 
 class Chats(db.Model):
@@ -20,6 +24,7 @@ class Chats(db.Model):
     message= db.Column(db.String(200), nullable = False)
     username= db.Column(db.String(200), nullable = False)
     topic= db.Column(db.String(200), nullable = False)
+    time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     # created_at= db.Column(db.DateTime, default= datetime)
 
@@ -35,7 +40,8 @@ TOPICS = [
     "other"
 ]
 
-name = ""
+
+
 
 @app.route("/")
 def index():
@@ -43,20 +49,21 @@ def index():
 
 @app.route("/changename",  methods=["POST"])
 def changename():
-    global name
-    name = request.form.get("username")
-    print(name)
-    return redirect("/games")
+    session["name"]= request.form.get("username")
+    if not session.get("page"):
+        session["page"] = "games"
+        return redirect("/games")
+    target_page = "/"+ session["page"]
+    return redirect(target_page)
 
 
 @app.route("/games", methods=["POST", "GET"])
 def games():
-    global name
     if request.method == "POST":
-        if name != "":
+        if  session["name"] != "":
             chat_message = request.form.get("message")
-            username = name
-            new_chats = Chats(username=name, message=chat_message, topic="games")
+            username = session["name"]
+            new_chats = Chats(username=username, message=chat_message, topic="games")
             try:
                 # print(new_chats.username)
                 # print(new_chats.message)
@@ -68,18 +75,23 @@ def games():
                 return render_template("error.html", message = "There was an error adding the user" )
         else:
             return render_template("error.html", message = "Username has to not be blank" )
-    
+    if not session.get("name"):
+        session["name"]=""
+    username = session.get("name")
+    session["page"] = "games"
     game_messages = Chats.query.filter_by(topic='games').order_by(Chats.id)
-    return render_template("games.html", topics = TOPICS, messages= game_messages, username = name)
+    return render_template("games.html", topics = TOPICS, messages= game_messages, username = username)
+
+
+
 
 @app.route("/sports", methods=["POST", "GET"])
 def sports():
-    global name
     if request.method == "POST":
-        if name != "":
+        if  session["name"] != "":
             chat_message = request.form.get("message")
-            username = name
-            new_chats = Chats(username=name, message=chat_message, topic="sports")
+            username = session["name"]
+            new_chats = Chats(username=username, message=chat_message, topic="sports")
             try:
                 db.session.add(new_chats)
                 db.session.commit()
@@ -88,18 +100,20 @@ def sports():
                 return render_template("error.html", message = "There was an error adding the user" )
         else:
             return render_template("error.html", message = "Username has to not be blank" )
-    
+    if not session.get("name"):
+        session["name"]=""
+    username = session.get("name")
+    session["page"] = "sports"
     game_messages = Chats.query.filter_by(topic='sports').order_by(Chats.id)
-    return render_template("sports.html", topics = TOPICS, messages= game_messages, username = name)
+    return render_template("sports.html", topics = TOPICS, messages= game_messages, username = username)
 
 @app.route("/entertainment", methods=["POST", "GET"])
 def entertaiment():
-    global name
     if request.method == "POST":
-        if name != "":
+        if  session["name"] != "":
             chat_message = request.form.get("message")
-            username = name
-            new_chats = Chats(username=name, message=chat_message, topic="entertainment")
+            username =  session["name"]
+            new_chats = Chats(username=username, message=chat_message, topic="entertainment")
             try:
                 db.session.add(new_chats)
                 db.session.commit()
@@ -108,19 +122,21 @@ def entertaiment():
                 return render_template("error.html", message = "There was an error adding the user" )
         else:
             return render_template("error.html", message = "Username has to not be blank" )
-    
+    if not session.get("name"):
+        session["name"]=""
+    username = session.get("name")
+    session["page"] = "entertainment"
     game_messages = Chats.query.filter_by(topic='entertainment').order_by(Chats.id)
-    return render_template("entertainment.html", topics = TOPICS, messages= game_messages, username = name)
+    return render_template("entertainment.html", topics = TOPICS, messages= game_messages, username = username)
 
 
 @app.route("/other", methods=["POST", "GET"])
 def other():
-    global name
     if request.method == "POST":
-        if name != "":
+        if  session["name"] != "":
             chat_message = request.form.get("message")
-            username = name
-            new_chats = Chats(username=name, message=chat_message, topic="other")
+            username = session["name"]
+            new_chats = Chats(username=username, message=chat_message, topic="other")
             try:
                 db.session.add(new_chats)
                 db.session.commit()
@@ -129,6 +145,9 @@ def other():
                 return render_template("error.html", message = "There was an error adding the user" )
         else:
             return render_template("error.html", message = "Username has to not be blank" )
-    
+    if not session.get("name"):
+        session["name"]=""
+    username = session.get("name")
+    session["page"] = "other"
     game_messages = Chats.query.filter_by(topic='other').order_by(Chats.id)
-    return render_template("other.html", topics = TOPICS, messages= game_messages, username = name)
+    return render_template("other.html", topics = TOPICS, messages= game_messages, username = username)
