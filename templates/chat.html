@@ -6,10 +6,10 @@
   <div class="chat-rooms mb-3 text-center">
     <div class="my-2">Choose a chatroom:</div>
 
-    {% for topic in topics %} {% if topic == "games" %}
-    <a href="/{{topic}}" class="btn active" id="{{topic}}">#{{topic}}</a>
+    {% for topic in topics %} {% if topic == current_topic %}
+    <a href="/chat?page={{topic}}" class="btn active" id="{{topic}}">#{{topic}}</a>
     {% else %}
-    <a href="/{{topic}}" class="btn" id="{{topic}}">#{{topic}}</a>
+    <a href="/chat?page={{topic}}" class="btn" id="{{topic}}">#{{topic}}</a>
     {% endif %} {% endfor %}
   </div>
   <!-- name heading -->
@@ -29,7 +29,7 @@
     </ul>
   </div>
   <!-- new chat form -->
-  <form class="new-chat my-3" action="/games" method="POST">
+  <form class="new-chat my-3" action="/chat" method="POST">
     <div class="input-group">
       <div class="input-group-prepend">
         <div class="input-group-text">Your message:</div>
