@@ -31,34 +31,104 @@ class Chats(db.Model):
 TOPICS = [
     "games",
     "sports",
-    "entertaiment",
+    "entertainment",
     "other"
 ]
 
+name = ""
 
 @app.route("/")
 def index():
     return render_template("index.html", topics = TOPICS)
 
+@app.route("/changename",  methods=["POST"])
+def changename():
+    global name
+    name = request.form.get("username")
+    print(name)
+    return redirect("/games")
 
 
 @app.route("/games", methods=["POST", "GET"])
 def games():
+    global name
     if request.method == "POST":
-        chat_message = request.form.get("message")
-        username = "John"
-        topic = "games"
-        new_chats = Chats(username="John", message=chat_message, topic="games")
-        try:
-            # print(new_chats.username)
-            # print(new_chats.message)
-            db.session.add(new_chats)
-            db.session.commit()
-            print("worked")
-            return redirect("/games")
-        except: 
-            return render_template("error.html", message = "There was an error adding the user" )
+        if name != "":
+            chat_message = request.form.get("message")
+            username = name
+            new_chats = Chats(username=name, message=chat_message, topic="games")
+            try:
+                # print(new_chats.username)
+                # print(new_chats.message)
+                db.session.add(new_chats)
+                db.session.commit()
+                print("worked")
+                return redirect("/games")
+            except: 
+                return render_template("error.html", message = "There was an error adding the user" )
+        else:
+            return render_template("error.html", message = "Username has to not be blank" )
     
     game_messages = Chats.query.filter_by(topic='games').order_by(Chats.id)
+    return render_template("games.html", topics = TOPICS, messages= game_messages, username = name)
 
-    return render_template("games.html", topics = TOPICS, messages= game_messages)
+@app.route("/sports", methods=["POST", "GET"])
+def sports():
+    global name
+    if request.method == "POST":
+        if name != "":
+            chat_message = request.form.get("message")
+            username = name
+            new_chats = Chats(username=name, message=chat_message, topic="sports")
+            try:
+                db.session.add(new_chats)
+                db.session.commit()
+                return redirect("/sports")
+            except: 
+                return render_template("error.html", message = "There was an error adding the user" )
+        else:
+            return render_template("error.html", message = "Username has to not be blank" )
+    
+    game_messages = Chats.query.filter_by(topic='sports').order_by(Chats.id)
+    return render_template("sports.html", topics = TOPICS, messages= game_messages, username = name)
+
+@app.route("/entertainment", methods=["POST", "GET"])
+def entertaiment():
+    global name
+    if request.method == "POST":
+        if name != "":
+            chat_message = request.form.get("message")
+            username = name
+            new_chats = Chats(username=name, message=chat_message, topic="entertainment")
+            try:
+                db.session.add(new_chats)
+                db.session.commit()
+                return redirect("/entertainment")
+            except: 
+                return render_template("error.html", message = "There was an error adding the user" )
+        else:
+            return render_template("error.html", message = "Username has to not be blank" )
+    
+    game_messages = Chats.query.filter_by(topic='entertainment').order_by(Chats.id)
+    return render_template("entertainment.html", topics = TOPICS, messages= game_messages, username = name)
+
+
+@app.route("/other", methods=["POST", "GET"])
+def other():
+    global name
+    if request.method == "POST":
+        if name != "":
+            chat_message = request.form.get("message")
+            username = name
+            new_chats = Chats(username=name, message=chat_message, topic="other")
+            try:
+                db.session.add(new_chats)
+                db.session.commit()
+                return redirect("/other")
+            except: 
+                return render_template("error.html", message = "There was an error adding the user" )
+        else:
+            return render_template("error.html", message = "Username has to not be blank" )
+    
+    game_messages = Chats.query.filter_by(topic='other').order_by(Chats.id)
+    return render_template("other.html", topics = TOPICS, messages= game_messages, username = name)

@@ -6,7 +6,7 @@
   <div class="chat-rooms mb-3 text-center">
     <div class="my-2">Choose a chatroom:</div>
 
-    {% for topic in topics %} {% if topic == "games" %}
+    {% for topic in topics %} {% if topic == "other" %}
     <a href="/{{topic}}" class="btn active" id="{{topic}}">#{{topic}}</a>
     {% else %}
     <a href="/{{topic}}" class="btn" id="{{topic}}">#{{topic}}</a>
@@ -28,7 +28,7 @@
     </ul>
   </div>
   <!-- new chat form -->
-  <form class="new-chat my-3" action="/games" method="POST">
+  <form class="new-chat my-3" action="/other" method="POST">
     <div class="input-group">
       <div class="input-group-prepend">
         <div class="input-group-text">Your message:</div>
