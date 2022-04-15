@@ -46,11 +46,11 @@ TOPICS = [
     "other"
 ]
 
-@app.route("/")
+@app.route("/enterchat")
 def index():
     return render_template("index.html", topics = TOPICS)
 
-@app.route("/signin")
+@app.route("/")
 def signin():
     return render_template("signin.html", topics = TOPICS)
 
