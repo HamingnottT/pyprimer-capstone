@@ -1,6 +1,4 @@
-# pyprimer-capstone
-# Project 2
-Revature Big Data Project 2
+# Python Primer Capstone
 
 
 # Project Description
