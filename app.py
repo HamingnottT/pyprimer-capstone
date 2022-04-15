@@ -18,17 +18,17 @@ db = SQLAlchemy(app)
 
 #Create DB Model
 
-class Chats(db.Model):
-    id= db.Column(db.Integer, primary_key = True)
-    message= db.Column(db.String(200), nullable = False)
-    username= db.Column(db.String(200), nullable = False, foreign_key = True)
-    topic= db.Column(db.String(200), nullable = False)
-    created_at= db.Column(db.DateTime, default= datetime.utcnow)
-
 class Admin(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
+
+class Chats(db.Model):
+    id= db.Column(db.Integer, primary_key = True)
+    message= db.Column(db.String(200), nullable = False)
+    username= db.Column(db.String(200), db.ForeignKey("admin.username"), nullable = False)
+    topic= db.Column(db.String(200), nullable = False)
+    created_at= db.Column(db.DateTime, default= datetime.utcnow)
 
 
 # function to return a string when we addsomething
@@ -39,9 +39,12 @@ class Admin(db.Model):
 # Form classes to add usernames to database
 
 class UserForm(FlaskForm):
-
+    username = StringField("Username", validators=[DataRequired()])
+    password = StringField("Password", validators=[DataRequired()])
+    submit = SubmitField("Submit")
 
 # ------------------------------------------------------
+
 TOPICS = [
     "games",
     "sports",
@@ -54,7 +57,14 @@ TOPICS = [
 def index():
     return render_template("index.html", topics = TOPICS)
 
+# ------------------Jake was here-----------------------
+# add user function
 
+@app.route("/user/add", methods=["POST", "GET"])
+def add_user():
+    return render_template("add_user.html")
+
+# ------------------------------------------------------
 
 @app.route("/games", methods=["POST", "GET"])
 def games():
