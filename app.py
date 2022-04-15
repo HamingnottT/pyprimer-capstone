@@ -86,6 +86,10 @@ TOPICS = [
 def index():
     return render_template("index.html", topics = TOPICS)
 
+@app.route("/signin")
+def signin():
+    return render_template("signin.html", topics = TOPICS)
+
 @app.route("/changename",  methods=["POST"])
 def changename():
     session["name"]= request.form.get("username")
