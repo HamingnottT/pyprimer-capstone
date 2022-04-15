@@ -133,3 +133,7 @@ dev_utils/
 
 # codemy
 codemy/
+
+# Backup folder
+
+backup/

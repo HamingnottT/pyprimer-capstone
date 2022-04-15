@@ -15,8 +15,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chats.db'
 app.config['SESSION_PERMANENT']= False
 app.config['SESSION_TYPE']= "filesystem"
 
-# secret key for NameForm
-
 
 # initialize the database
 db = SQLAlchemy(app)
@@ -36,44 +34,10 @@ class Chats(db.Model):
     topic= db.Column(db.String(200), nullable = False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
-    # created_at= db.Column(db.DateTime, default= datetime)
-
 
 # function to return a string when we addsomething
     def __repr__(self):
         return '<Name %r>' % self.id
-
-# ------------------Jake was here-----------------------
-# Form classes to add usernames to database
-
-class UserForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = StringField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-# ------------------------------------------------------
-# for mock index
-import dev_utils.secret_key as sk           #this import is local
-
-app.config['SECRET_KEY'] = sk.secret_key    #abstracted secret key
-
-class NamerForm(FlaskForm):
-    name = StringField("What's your name?", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-@app.route("/name", methods=["GET", "POST"])
-def name():
-    name = None
-    form = NamerForm()
-    # validate form
-    if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ""
-    return render_template("mock_index.html",
-        name = name,
-        form = form)
-
-# ------------------------------------------------------
 
 TOPICS = [
     "games",
@@ -99,15 +63,6 @@ def changename():
     target_page = "/chat?page="+ session["page"]
     return redirect(target_page)
 
-# ------------------------------------------------------
-""" Not in use. May delete this code block. """
-
-@app.route("/user/add", methods=["POST", "GET"])
-def add_user():
-    form = UserForm()
-    return render_template("add_user.html", form=form)
-
-# ------------------------------------------------------
 
 @app.route("/chat", methods=["POST", "GET"])
 def chat():
@@ -118,8 +73,6 @@ def chat():
             page = session["page"]
             new_chats = Chats(username=username, message=chat_message, topic=page)
             try:
-                # print(new_chats.username)
-                # print(new_chats.message)
                 db.session.add(new_chats)
                 db.session.commit()
                 print("worked")
