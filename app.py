@@ -18,6 +18,7 @@ db = SQLAlchemy(app)
 
 #Create DB Model
 
+#New Admin table in db for username and password storage
 class Admin(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
