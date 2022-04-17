@@ -7,7 +7,7 @@
       <!-- buttons for chatrooms -->
 
       <div class="mb-3 text-center">
-        <div class="my-2">Welcome to the chat:</div>
+        <div class="my-2">Sign in here:</div>
       </div>
 
    
@@ -28,13 +28,12 @@
           <div class="input-group-text">Password:</div>
         </div>
         <input type="password" id="name" name = "password" class="form-control" required />
-        <!-- <div class="input-group-append">
-          <input type="submit" class="btn" value="Enter Chat" />
-        </div> -->
       </div>
       <br>
       <div class="mb-3 text-center">
         <input type="submit" class="btn" value="Enter Chat" />
+        <br><br>
+        <a href="{{ url_for('signup') }}">Sign-up here</a>
       </div>
       <div class="update-mssg"></div>
     </form>
