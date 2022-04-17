@@ -1,16 +1,11 @@
-from email.policy import default
-from pydoc_data.topics import topics
-from flask import Flask, redirect, render_template, request, session, flash
+from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from datetime import datetime
 from flask_session import Session
 from sqlalchemy.sql import func
-
-# secret key for UserForm
-from dev_utils import secret_key as sk
 
 app = Flask(__name__)
 
@@ -20,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chats.db'
 app.config['SESSION_PERMANENT']= False
 app.config['SESSION_TYPE']= "filesystem"
 
-app.config['SECRET_KEY'] = sk.secret_key    #abstracted secret key
+# secret key for NameForm
 
 
 # initialize the database
@@ -31,10 +26,8 @@ Session(app)
 #New Admin table in db for username and password storage
 class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
-    email= db.Column(db.String(500), nullable = False, unique = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
-    date_added= db.Column(db.DateTime, default=datetime.utcnow)
 
 class Chats(db.Model):
     id= db.Column(db.Integer, primary_key = True)
@@ -43,10 +36,44 @@ class Chats(db.Model):
     topic= db.Column(db.String(200), nullable = False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
+    # created_at= db.Column(db.DateTime, default= datetime)
+
 
 # function to return a string when we addsomething
     def __repr__(self):
         return '<Name %r>' % self.id
+
+# ------------------Jake was here-----------------------
+# Form classes to add usernames to database
+
+class UserForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    password = StringField("Password", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+# ------------------------------------------------------
+# for mock index
+import dev_utils.secret_key as sk           #this import is local
+
+app.config['SECRET_KEY'] = sk.secret_key    #abstracted secret key
+
+class NamerForm(FlaskForm):
+    name = StringField("What's your name?", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+@app.route("/name", methods=["GET", "POST"])
+def name():
+    name = None
+    form = NamerForm()
+    # validate form
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ""
+    return render_template("mock_index.html",
+        name = name,
+        form = form)
+
+# ------------------------------------------------------
 
 TOPICS = [
     "games",
@@ -55,54 +82,13 @@ TOPICS = [
     "other"
 ]
 
-# UserForm for index
-class UserForm(FlaskForm):
-    username = StringField("", validators=[DataRequired()])
-    email = StringField("", validators=[DataRequired()])
-    password = PasswordField("", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-# sign-in portal
 @app.route("/")
-def signin():
-    # for credential screening to verify account is valid
-    username = None
-    password = None
-    form = UserForm
-
-    return render_template("signin.html", form = form)
-
-# sign up page
-@app.route("/add/user")
-def signup():
-    # for Regex to sign up
-    username = None
-    password = None
-    form = UserForm()
-
-    # validate form
-    if form.validate_on_submit():
-        # queries User db for any matches on inputed email info
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None:
-            user = User(username=form.username.data, password=form.username.data, email=form.email.data)
-            db.session.add(user)
-            db.session.commit()
-        username = form.username.data
-        form.username.data = ''
-        form.email.data = ''
-        form.password.data = ''
-        flash("User Added Successfully!")
-    
-    our_users = User.query.order_by(User.date_added)
-    return render_template("test_add.html", 
-        form = form,
-        username = username,
-        our_users = our_users)
-
-@app.route("/index")
 def index():
     return render_template("index.html", topics = TOPICS)
+
+@app.route("/signin")
+def signin():
+    return render_template("signin.html", topics = TOPICS)
 
 @app.route("/changename",  methods=["POST"])
 def changename():
@@ -113,6 +99,15 @@ def changename():
     target_page = "/chat?page="+ session["page"]
     return redirect(target_page)
 
+# ------------------------------------------------------
+""" Not in use. May delete this code block. """
+
+@app.route("/user/add", methods=["POST", "GET"])
+def add_user():
+    form = UserForm()
+    return render_template("add_user.html", form=form)
+
+# ------------------------------------------------------
 
 @app.route("/chat", methods=["POST", "GET"])
 def chat():
@@ -123,6 +118,8 @@ def chat():
             page = session["page"]
             new_chats = Chats(username=username, message=chat_message, topic=page)
             try:
+                # print(new_chats.username)
+                # print(new_chats.message)
                 db.session.add(new_chats)
                 db.session.commit()
                 print("worked")

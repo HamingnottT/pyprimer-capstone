@@ -1,0 +1,30 @@
+
+    {% extends "layout.html" %}
+    {% block body %}
+    <!-- container & title -->
+    <div class="container my-4">
+      <h1 class="my-4 text-center fraunces fw-900">Pod 4 Chat</h1>
+      <!-- buttons for chatrooms -->
+
+      <div class="mb-3 text-center">
+        <div class="my-2">Welcome to the chat:</div>
+      </div>
+
+   
+    <!-- update name form -->
+    <form class="new-name my-3" method="POST" action= "/changename">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Set your username:</div>
+        </div>
+        <input type="text" id="name" name = "username" class="form-control" required />
+        <div class="input-group-append">
+          <input type="submit" class="btn" value="Enter Chat" />
+        </div>
+      </div>
+      <div class="update-mssg"></div>
+    </form>
+  </div>
+
+  
+    {% endblock %}
