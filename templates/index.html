@@ -5,25 +5,47 @@
     <div class="container my-4">
       <h1 class="my-4 text-center fraunces fw-900">Pod 4 Chat</h1>
       <!-- buttons for chatrooms -->
+      {% if error %}
+      <div id='alert' class="alert alert-danger ">
+        {{error}}
+      </div>
+      {% endif %}
+      {% if message %}
+      <div id='success' class="alert alert-success">
+        {{message}}
+      </div>
+      {% endif %}
 
       <div class="mb-3 text-center">
-        <div class="my-2">Welcome to the chat:</div>
+        <div class="my-2">Welcome to the chat. Please sign in to continue.</div>
       </div>
+
+
+
 
    
     <!-- update name form -->
-    <form class="new-name my-3" method="POST" action= "/changename">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Set your username:</div>
+    <form class="new-name my-3" method="POST" action= "/sign-in">
+      <div class="form-group">
+          <label class = "mb-2" for="UsernameLog">Username</label>
+          <input type="text" class="form-control" id="UsernameLog"name = "username" required placeholder="Enter your username">
+          <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
         </div>
-        <input type="text" id="name" name = "username" class="form-control" required />
-        <div class="input-group-append">
-          <input type="submit" class="btn" value="Enter Chat" />
+        <div class="form-group">
+          <label class = "mb-2" for="passwordLog">Password</label>
+          <input type="password" class="form-control" id="passwordLog" name = "password" required placeholder="Password">
         </div>
-      </div>
-      <div class="update-mssg"></div>
-    </form>
+        <!-- <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div> -->
+      
+        <div class="mb-2 text-center">
+          <p>Not a member? <a href="/new-user">Register</a></p>
+        </div>
+        <button type="submit" class="btn ">Submit</button>
+      
+  </form>
   </div>
 
   
