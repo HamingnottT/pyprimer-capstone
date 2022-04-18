@@ -19,6 +19,10 @@ db = SQLAlchemy(app)
 Session(app)
 #Create DB Model
 
+class Topics(db.Model):
+    id= db.Column(db.Integer, primary_key = True)
+    topics = db.Column(db.String(50), nullable = False, unique = True)
+
 class Chats(db.Model):
     __tablename__ = 'chat'
     id= db.Column(db.Integer, primary_key = True)
