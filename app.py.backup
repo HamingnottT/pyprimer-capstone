@@ -29,6 +29,10 @@ Session(app)
 #Create DB Model
 
 #New Admin table in db for username and password storage
+class Topics(db.Model):
+    id= db.Column(db.Integer, primary_key = True)
+    topics = db.Column(db.String(50), nullable = False, unique = True)
+
 class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     email= db.Column(db.String(500), nullable = False, unique = True)
