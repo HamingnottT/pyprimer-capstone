@@ -76,8 +76,8 @@ def signin():
 @app.route("/add/user")
 def signup():
     # for Regex to sign up
-    username = None
-    password = None
+    # username = None
+    # password = None
     form = UserForm()
 
     # validate form
