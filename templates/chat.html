@@ -21,7 +21,7 @@
     <ul class="chat-list list-group">
       {% for chat in messages %}
       <li class="list-group-item">
-        <span class="username fraunces fw-700">{{chat.username}}:</span>
+        <span class="username fraunces fw-700">{{chat.user.username}}:</span>
         <span class="message">{{chat.message}}</span>
         <div class="time mt-2">{{chat.time_created }}</div>
       </li>
@@ -40,7 +40,7 @@
       </div>
     </div>
   </form>
-  <!-- update name form -->
+  <!-- update name form
   <form class="new-name my-3" method="POST" action= "/changename">
     <div class="input-group">
       <div class="input-group-prepend">
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="update-mssg"></div>
-  </form>
+  </form> -->
 </div>
 
 
