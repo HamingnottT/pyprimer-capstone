@@ -36,10 +36,13 @@ class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
+    # adimin= db.Column(db.String(200), nullable = False)
+    # one to many
     chats = db.relationship("Chats", backref="user")
     def __repr__(self):
         return '<Name %r>' % self.id
 
+# Topics can be it's own table
 TOPICS = [
     "games",
     "sports",
@@ -56,12 +59,14 @@ def index():
 
 @app.route("/new-user", methods=["POST", "GET"])
 def new_user():
-    if request.method == "POST":
+    if request.method == "POST": 
+        # getting the information
         username = request.form.get("username")
         password = request.form.get("password")
+        # checking user
         existing_check = User.query.filter_by(username=username).first()
         if existing_check:
-            return render_template("newuser.html", error = "User already exist with that name")
+            return render_template("newuser.html", error = "User already exists with that name")
         user = User(username=username, password = password)
         try:
             db.session.add(user)
@@ -127,18 +132,18 @@ def chat():
             return render_template("error.html", message = "Username has to not be blank" )
     chatroom=False
     for topic in TOPICS:
+        # getting the end of get query
         if topic == request.args.get("page"):
             session["page"] = request.args.get("page")
             chatroom=True
     if chatroom== False:
         return redirect("/chat?page="+ TOPICS[0])
+    # checking if there is a user logged in
     if not session.get("name") or not session.get("id") :
         return render_template("index.html", message = "You must sign in to continue chatting." )
     username = session.get("name")
     page = session.get("page")
     game_messages = Chats.query.filter_by(topic=page).order_by(Chats.id).join(User)
-    for message in game_messages:
-        print(message)
     return render_template("chat.html", topics = TOPICS, messages= game_messages, username = username, current_topic = page)
 
 
