@@ -27,10 +27,6 @@ class Chats(db.Model):
     topic= db.Column(db.String(200), nullable = False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
-    # created_at= db.Column(db.DateTime, default= datetime)
-
-
-# function to return a string when we addsomething
     def __repr__(self):
         return '<Name %r>' % self.id
 
@@ -41,8 +37,6 @@ class User(db.Model):
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
     chats = db.relationship("Chats", backref="user")
-    # time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
-
     def __repr__(self):
         return '<Name %r>' % self.id
 
@@ -65,6 +59,9 @@ def new_user():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+        existing_check = User.query.filter_by(username=username).first()
+        if existing_check:
+            return render_template("newuser.html", error = "User already exist with that name")
         user = User(username=username, password = password)
         try:
             db.session.add(user)
@@ -73,12 +70,10 @@ def new_user():
             users = User.query
             for user in users:
                 print(user.username)
-            print(user.password)
-            return redirect("/")
+                print(user.password)
+            return render_template("index.html", message = "Registration Successful. Please sign in." )
         except: 
             return render_template("error.html", message = "There was an error adding the user" )
-
-
     return render_template("newuser.html")
 
 @app.route("/sign-in", methods=["POST"])
@@ -87,13 +82,22 @@ def sign_in():
     password = request.form.get("password")
     user = User.query.filter_by(username=username).first()
     if user is None:
-        return render_template("error.html", message = "No such user exists" )
+        return render_template("index.html", error = "No such user exists. Please try again." )
     if user.username == username and user.password == password:
         session["name"]=user.username
         session["id"]=user.id
-        print(session["name"])
-        print(session["id"])
+        session["page"] =TOPICS[0]
+        target_page = "/chat?page="+ session["page"]
+        return redirect(target_page)
+    return render_template("index.html", error = "Invalid Credentials. Try again." )
+
+
+@app.route("/sign-out")
+def sign_out():
+    session["name"]=None
+    session["id"]=None
     return redirect("/")
+
 
 @app.route("/changename",  methods=["POST"])
 def changename():
@@ -128,8 +132,8 @@ def chat():
             chatroom=True
     if chatroom== False:
         return redirect("/chat?page="+ TOPICS[0])
-    if not session.get("name"):
-        session["name"]=""
+    if not session.get("name") or not session.get("id") :
+        return render_template("index.html", message = "You must sign in to continue chatting." )
     username = session.get("name")
     page = session.get("page")
     game_messages = Chats.query.filter_by(topic=page).order_by(Chats.id).join(User)
