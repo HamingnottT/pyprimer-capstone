@@ -12,18 +12,36 @@
     <a href="/chat?page={{topic}}" class="btn" id="{{topic}}">#{{topic}}</a>
     {% endif %} {% endfor %}
   </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> origin/gamsbranch
   <!-- name heading -->
   <div class = "username-header">
     <h3 class = "fraunces fw-700 mb-3">Username: {{username}}</h3>
   </div>
+<<<<<<< HEAD
+=======
+>>>>>>> origin/gamsbranch
+>>>>>>> origin/gamsbranch
   <!-- chat list / window -->
   <div class="chat-window">
     <ul class="chat-list list-group">
       {% for chat in messages %}
       <li class="list-group-item">
+<<<<<<< HEAD
         <span class="username fraunces fw-700">{{chat.username}}:</span>
         <span class="message">{{chat.message}}</span>
         <div class="time mt-2">{{chat.time_created }}</div>
+=======
+        <span class="username fraunces fw-700">{{chat.user.username}}:</span>
+        <span class="message">{{chat.message}}</span>
+<<<<<<< HEAD
+=======
+        <div class="time mt-2">{{chat.time_created }}</div>
+>>>>>>> origin/gamsbranch
+>>>>>>> origin/gamsbranch
       </li>
       {% endfor %}
     </ul>
@@ -40,7 +58,13 @@
       </div>
     </div>
   </form>
+<<<<<<< HEAD
   <!-- update name form -->
+=======
+
+  <a href="/sign-out" class= "btn ">Sign Out</a>
+  <!-- update name form
+>>>>>>> origin/gamsbranch
   <form class="new-name my-3" method="POST" action= "/changename">
     <div class="input-group">
       <div class="input-group-prepend">
@@ -52,7 +76,11 @@
       </div>
     </div>
     <div class="update-mssg"></div>
+<<<<<<< HEAD
   </form>
+=======
+  </form> -->
+>>>>>>> origin/gamsbranch
 </div>
 
 
