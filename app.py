@@ -1,3 +1,4 @@
+from pydoc_data.topics import topics
 from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -47,14 +48,24 @@ class User(db.Model):
         return '<Name %r>' % self.id
 
 # Topics can be it's own table
-TOPICS = [
-    "games",
-    "sports",
-    "entertainment",
-    "other", 
-]
+# TOPICS = [
+#     "games",
+#     "sports",
+#     "entertainment",
+#     "other", 
+# ]
 
 
+TOPICS = []
+
+# db.session.add(Topics(topic="#games"))
+# db.session.add(Topics(topic="#sports"))
+# db.session.add(Topics(topic="#entertainment"))
+# db.session.add(Topics(topic="#other"))
+# db.session.commit()
+
+# for topic in Topics:
+#     TOPICS.append(Topics.query(topic))
 
 
 @app.route("/")
