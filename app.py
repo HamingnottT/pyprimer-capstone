@@ -9,9 +9,6 @@ from datetime import datetime
 from flask_session import Session
 from sqlalchemy.sql import func
 
-# secret key for UserForm
-from dev_utils import secret_key as sk
-
 app = Flask(__name__)
 
 
@@ -20,8 +17,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chats.db'
 app.config['SESSION_PERMANENT']= False
 app.config['SESSION_TYPE']= "filesystem"
 
-app.config['SECRET_KEY'] = sk.secret_key    #abstracted secret key
-
 
 # initialize the database
 db = SQLAlchemy(app)
@@ -29,12 +24,12 @@ Session(app)
 #Create DB Model
 
 #New Admin table in db for username and password storage
-class User(db.Model):
-    id= db.Column(db.Integer, primary_key = True)
-    email= db.Column(db.String(500), nullable = False, unique = True)
-    username= db.Column(db.String(200), nullable = False, unique = True)
-    password= db.Column(db.String(200), nullable = False)
-    date_added= db.Column(db.DateTime, default=datetime.utcnow)
+# class User(db.Model):
+#     id= db.Column(db.Integer, primary_key = True)
+#     email= db.Column(db.String(500), nullable = False, unique = True)
+#     username= db.Column(db.String(200), nullable = False, unique = True)
+#     password= db.Column(db.String(200), nullable = False)
+#     date_added= db.Column(db.DateTime, default=datetime.utcnow)
 
 class Chats(db.Model):
     __tablename__ = 'chat'
