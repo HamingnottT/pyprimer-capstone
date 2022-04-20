@@ -1,6 +1,4 @@
-# pyprimer-capstone
-# Project 2
-Revature Big Data Project 2
+# Python Primer Capstone
 
 
 # Project Description
@@ -12,6 +10,8 @@ Our project is a website forum where users can sign up, share their thoughts, an
 -VScode & PyCharm
 
 -HTML5
+
+-CSS & SCSS
 
 -Python v. 3.10.3
 
@@ -69,3 +69,4 @@ To terminate your session, simply close the open webpage and in the terminal pre
 
 # License
 Unlicensed
+

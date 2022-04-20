@@ -57,15 +57,22 @@ class User(db.Model):
 
 
 TOPICS = []
-
-# db.session.add(Topics(topic="#games"))
-# db.session.add(Topics(topic="#sports"))
-# db.session.add(Topics(topic="#entertainment"))
-# db.session.add(Topics(topic="#other"))
-# db.session.commit()
+try:
+    # db.session.add(Topics(topics="games"))
+    # db.session.add(Topics(topics="sports"))
+    # db.session.add(Topics(topics="entertainment"))
+    # db.session.add(Topics(topics="other"))
+    # db.session.commit()
+    pass
+except:
+    # db.session.rollback()
+    pass
+finally:
+    # session.close()
+    pass
 
 # for topic in Topics:
-#     TOPICS.append(Topics.query(topic))
+#   TOPICS.append(Topics.query(topics))
 
 
 @app.route("/")
