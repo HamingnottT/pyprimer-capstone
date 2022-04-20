@@ -41,7 +41,8 @@ class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
-    # adimin= db.Column(db.String(200), nullable = False)
+    admin= db.Column(db.String(200), nullable = False)
+    # admin_pass= db.Column(db.String(200), nullable = False)
     # one to many
     chats = db.relationship("Chats", backref="user")
     def __repr__(self):
@@ -71,8 +72,9 @@ finally:
     # session.close()
     pass
 
-# for topic in Topics:
+for topic in Topics:
 #   TOPICS.append(Topics.query(topics))
+    Topics.query.filter_by(topics=topic)
 
 
 @app.route("/")
