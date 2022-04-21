@@ -78,3 +78,17 @@ body {
 #password-alert {
   display: none;
 }
+
+.chat-window {
+  max-height: calc(100vh - 404px);
+  overflow-y: scroll;
+}
+
+.list-group-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}

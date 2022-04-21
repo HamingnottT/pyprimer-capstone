@@ -26,6 +26,7 @@ class Chats(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     topic= db.Column(db.String(200), nullable = False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    visible = db.Column(db.String(200), nullable = False, server_default="yes")
 
     def __repr__(self):
         return '<Name %r>' % self.id
@@ -116,10 +117,10 @@ def changename():
 
 @app.route("/chat", methods=["POST", "GET"])
 def chat():
+    id = session["id"]
     if request.method == "POST":
         if  session["id"] != None:
             chat_message = request.form.get("message")
-            id = session["id"]
             page = session["page"]
             new_chats = Chats(user_id=id, message=chat_message, topic=page)
             try:
@@ -144,6 +145,19 @@ def chat():
     username = session.get("name")
     page = session.get("page")
     game_messages = Chats.query.filter_by(topic=page).order_by(Chats.id).join(User)
-    return render_template("chat.html", topics = TOPICS, messages= game_messages, username = username, current_topic = page)
+    return render_template("chat.html", topics = TOPICS, messages= game_messages, username = username, current_topic = page, user_id = id)
 
+
+@app.route("/delete", methods=["GET"])
+def delete():
+    user_id= request.args.get("id")
+    chat_id= request.args.get("chat")
+    page = session["page"]
+    chat_to_update = Chats.query.get_or_404(chat_id)
+    if session["id"] != None:
+        return render_template("index.html", message = "You must login in order to delete a chat.")
+    if session["id"] != user_id:
+        return redirect("/chat?page="+page)
+    chat_to_update.visible = "no"
+    return redirect("/chat?page="+page)
 

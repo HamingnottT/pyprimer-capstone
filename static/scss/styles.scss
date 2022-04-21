@@ -67,3 +67,12 @@ body{
 #password-alert{
     display: none;
   }
+
+  .chat-window{
+    max-height: calc(100vh - 404px);
+    overflow-y: scroll;
+  }
+  .list-group-item{
+    display: flex;
+    justify-content: space-between;
+  }

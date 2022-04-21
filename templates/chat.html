@@ -13,18 +13,27 @@
     {% endif %} {% endfor %}
   </div>
   <!-- name heading -->
-  <div class = "username-header">
-    <h3 class = "fraunces fw-700 mb-3">Username: {{username}}</h3>
+  <div class="username-header">
+    <h3 class="fraunces fw-700 mb-3">Username: {{username}}</h3>
   </div>
   <!-- chat list / window -->
   <div class="chat-window">
     <ul class="chat-list list-group">
       {% for chat in messages %}
+       {% if chat.visible == "yes" %} 
       <li class="list-group-item">
-        <span class="username fraunces fw-700">{{chat.user.username}}:</span>
-        <span class="message">{{chat.message}}</span>
-        <div class="time mt-2">{{chat.time_created }}</div>
+        <div class="right-side">
+          <span class="username fraunces fw-700">{{chat.user.username}}:</span>
+          <span class="message">{{chat.message}}</span>
+          <div class="time mt-2">{{chat.time_created }}</div>
+        </div>
+       {% if chat.user_id == user_id %}
+        <div class="left-side">
+          <a href="/delete?id={{user_id}}&chat={{chat.id}}" class="btn">Delete</a>
+        </div>
+        {% endif %} 
       </li>
+      {% endif %}  
       {% endfor %}
     </ul>
   </div>
@@ -41,7 +50,7 @@
     </div>
   </form>
 
-  <a href="/sign-out" class= "btn ">Sign Out</a>
+  <a href="/sign-out" class="btn">Sign Out</a>
   <!-- update name form
   <form class="new-name my-3" method="POST" action= "/changename">
     <div class="input-group">
@@ -57,8 +66,8 @@
   </form> -->
 </div>
 
+<script>
+  var times = document.getElementsByClassName("time");
+</script>
 
-<!-- <script src="scripts/chat.js"></script>
-    <script src="scripts/ui.js"></script>
-    <script src="scripts/app.js"></script> -->
 {% endblock %}
