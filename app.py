@@ -187,6 +187,8 @@ def chat():
 
     """
     Notes:
+    
+    chat.html
     Query to get the current users admin status, Boolean true or false:
 
     admin = session.get("admin")
@@ -198,5 +200,15 @@ def chat():
     <!-- {% endif %} {% endfor %} -->
 
     calling admin variable returns NoneType - not yet known how to solve this
+
+    admin.html
+    - functional 'Enter Chatroom' and 'Sign Out'
+    - Template made for query results under admin options
+
+    TO DO:
+    - construct queries for Users, Topics, and Message Board (may remove if delete feature is implemented in chatrooms)
+    - separate out each query onto their respective pages
+
+
 
     """
