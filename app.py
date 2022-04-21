@@ -194,6 +194,7 @@ def chat():
     admin = session.get("admin")
 
     Conditional to prvent non-admin users from seeing the dashboard:
+    Placed at the end of chat.html under sign-out anchor
 
     <!-- {% for admin in admin_status %} {% if admin == True %} -->
     <a href="/admin" class="btn" >Administrative Dashboard</a>
