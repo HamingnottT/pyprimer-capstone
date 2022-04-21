@@ -41,7 +41,7 @@ class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
     username= db.Column(db.String(200), nullable = False, unique = True)
     password= db.Column(db.String(200), nullable = False)
-    admin= db.Column(db.String(200), nullable = False)
+    admin= db.Column(db.Boolean, nullable = False)
     # admin_pass= db.Column(db.String(200), nullable = False)
     # one to many
     chats = db.relationship("Chats", backref="user")
@@ -49,15 +49,20 @@ class User(db.Model):
         return '<Name %r>' % self.id
 
 # Topics can be it's own table
-# TOPICS = [
-#     "games",
-#     "sports",
-#     "entertainment",
-#     "other", 
-# ]
+TOPICS = [
+    "games",
+    "sports",
+    "entertainment",
+    "other", 
+]
 
+ADMIN_TOPICS = [
+    "Users",
+    "Topics",
+    "Message Board"
+]
 
-TOPICS = []
+# TOPICS = []
 try:
     # db.session.add(Topics(topics="games"))
     # db.session.add(Topics(topics="sports"))
@@ -72,9 +77,9 @@ finally:
     # session.close()
     pass
 
-for topic in Topics:
+# for topic in Topics:
 #   TOPICS.append(Topics.query(topics))
-    Topics.query.filter_by(topics=topic)
+    # Topics.query.filter_by(topics=topic)
 
 
 @app.route("/")
@@ -116,6 +121,8 @@ def sign_in():
         session["name"]=user.username
         session["id"]=user.id
         session["page"] =TOPICS[0]
+        session["admin_page"] = ADMIN_TOPICS[0]
+        session["admin"] = user.admin
         target_page = "/chat?page="+ session["page"]
         return redirect(target_page)
     return render_template("index.html", error = "Invalid Credentials. Try again." )
@@ -137,6 +144,12 @@ def changename():
     target_page = "/chat?page="+ session["page"]
     return redirect(target_page)
 
+# Admin dashboard
+@app.route("/admin", methods=["POST", "GET"])
+def admin():
+    username = session.get("name")
+    admin_page = session.get("admin_page")
+    return render_template("admin.html", admin_topics = ADMIN_TOPICS, current_page = admin_page, username = username)
 
 @app.route("/chat", methods=["POST", "GET"])
 def chat():
@@ -145,6 +158,7 @@ def chat():
             chat_message = request.form.get("message")
             id = session["id"]
             page = session["page"]
+            # admin = session["admin"]
             new_chats = Chats(user_id=id, message=chat_message, topic=page)
             try:
                 db.session.add(new_chats)
@@ -167,5 +181,22 @@ def chat():
         return render_template("index.html", message = "You must sign in to continue chatting." )
     username = session.get("name")
     page = session.get("page")
+    admin = session.get("admin")
     game_messages = Chats.query.filter_by(topic=page).order_by(Chats.id).join(User)
-    return render_template("chat.html", topics = TOPICS, messages= game_messages, username = username, current_topic = page)
+    return render_template("chat.html", topics = TOPICS, messages= game_messages, username = username, current_topic = page, admin_status = admin)
+
+    """
+    Notes:
+    Query to get the current users admin status, Boolean true or false:
+
+    admin = session.get("admin")
+
+    Conditional to prvent non-admin users from seeing the dashboard:
+
+    <!-- {% for admin in admin_status %} {% if admin == True %} -->
+    <a href="/admin" class="btn" >Administrative Dashboard</a>
+    <!-- {% endif %} {% endfor %} -->
+
+    calling admin variable returns NoneType - not yet known how to solve this
+
+    """
