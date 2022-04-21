@@ -6,17 +6,22 @@
     </div>
     <!-- greets the admin on enter -->
     <div class = "username-header">
-        <h5 class = "fraunces fw-700 mb-3">Hello {{username}}</h5>
+        <h5 class = "fraunces fw-700 mb-3">Signed in: {{username}}</h5>
     </div>
     <div class="chat-rooms mb-3 text-center">
         <div class="my-2">Administrative options:</div>
     
         {% for topic in admin_topics %} {% if topic == current_page %}
-        <a href="/admin?page={{topic}}" class="btn active" id="{{topic}}">#{{topic}}</a>
+        <a href="/admin?page={{topic}}" class="btn active" id="{{topic}}">({{topic}})</a>
         {% else %}
-        <a href="/admin?page={{topic}}" class="btn" id="{{topic}}">#{{topic}}</a>
+        <a href="/admin?page={{topic}}" class="btn" id="{{topic}}">({{topic}})</a>
         {% endif %} {% endfor %}
+        <a href="/chat" class = "btn">Enter Chatroom</a>
+        <a href="/sign-out" class= "btn ">Sign Out</a>
       </div>
-
+      <div class="chat-window">
+        <ul class="chat-list list-group">
+            <li class="list-group-item">(User Account Credentials go here)</li>
+      </div>
 </div>
 {% endblock %}
